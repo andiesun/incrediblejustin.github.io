@@ -37,7 +37,7 @@ socket_state              state;
 <meta property="og:image" content="http://yoursite.com/images/0.1_1.png">
 <meta property="og:image" content="http://yoursite.com/images/2.1_1.png">
 <meta property="og:image" content="http://yoursite.com/images/2.2_1.png">
-<meta property="og:updated_time" content="2016-11-28T13:19:01.000Z">
+<meta property="og:updated_time" content="2016-11-28T13:20:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="套接字层的基本数据结构">
 <meta name="twitter:description" content="套接字层的基本数据结构
@@ -71,7 +71,7 @@ socket_state              state;
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img src="/images/JT.png" class="js-avatar">
+			<img src="/images/JT.jpg" class="js-avatar">
 			
 		</a>
 
@@ -128,7 +128,7 @@ socket_state              state;
 		<header id="header" class="inner">
 			<div class="profilepic">
 				
-					<img src="/images/JT.png" class="js-avatar">
+					<img src="/images/JT.jpg" class="js-avatar">
 				
 			</div>
 			<hgroup>
@@ -281,7 +281,7 @@ socket_state              state;
 <h3 id="2-1-inetsw-array"><a href="#2-1-inetsw-array" class="headerlink" title="2.1 inetsw_array[]"></a>2.1 inetsw_array[]</h3><pre><code>该数组中定义了协议族对应的所有的 inet_protosw 结构体
 </code></pre><p><img src="/images/2.1_1.png" alt=""></p>
 <h3 id="2-2-inetsw"><a href="#2-2-inetsw" class="headerlink" title="2.2 inetsw[]"></a>2.2 inetsw[]</h3><pre><code>1. 一个全局的 list_head 结构体数组,list_head结构体中有指向前驱和后继的两个指针
-2. 其对应的偏移是传输层协议对应的整型值
+2. 其对应的偏移是传输层协议类型对应的整型值
 </code></pre><p><img src="/images/2.2_1.png" alt="">    </p>
 <ol>
 <li>网络子系统初始化时，根据每一个inet_protosw结构的type类型，注册到 inetsw[] 中以其对应的元素为链表组成的一个双向链表中</li>
