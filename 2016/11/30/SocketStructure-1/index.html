@@ -9,6 +9,7 @@
   <title>套接字层的基本数据结构 | Sun</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="套接字层的基本数据结构
+
 套接字层位于应用程序与协议栈之间
 对应用程序屏蔽了与协议相关实现的具体细节
 将应用程序发送的与协议无关的请求映射到与协议相关的实现
@@ -16,14 +17,16 @@
 套接字层将一般的请求转换为指定的协议操作
 
 
-1. struct socket
-socket_state              state;
-  用">
+具体数据结构的讲解
+
+socket 结构体
+proto_ops 结构体">
 <meta property="og:type" content="article">
 <meta property="og:title" content="套接字层的基本数据结构">
-<meta property="og:url" content="http://yoursite.com/2016/11/28/socket-structure/index.html">
+<meta property="og:url" content="http://yoursite.com/2016/11/30/SocketStructure-1/index.html">
 <meta property="og:site_name" content="Sun">
 <meta property="og:description" content="套接字层的基本数据结构
+
 套接字层位于应用程序与协议栈之间
 对应用程序屏蔽了与协议相关实现的具体细节
 将应用程序发送的与协议无关的请求映射到与协议相关的实现
@@ -31,16 +34,16 @@ socket_state              state;
 套接字层将一般的请求转换为指定的协议操作
 
 
-1. struct socket
-socket_state              state;
-  用">
-<meta property="og:image" content="http://yoursite.com/images/0.1_1.png">
-<meta property="og:image" content="http://yoursite.com/images/2.1_1.png">
-<meta property="og:image" content="http://yoursite.com/images/2.2_1.png">
-<meta property="og:updated_time" content="2016-11-28T13:20:45.000Z">
+具体数据结构的讲解
+
+socket 结构体
+proto_ops 结构体">
+<meta property="og:image" content="http://yoursite.com/images/1.1_1.png">
+<meta property="og:updated_time" content="2016-11-30T11:36:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="套接字层的基本数据结构">
 <meta name="twitter:description" content="套接字层的基本数据结构
+
 套接字层位于应用程序与协议栈之间
 对应用程序屏蔽了与协议相关实现的具体细节
 将应用程序发送的与协议无关的请求映射到与协议相关的实现
@@ -48,10 +51,11 @@ socket_state              state;
 套接字层将一般的请求转换为指定的协议操作
 
 
-1. struct socket
-socket_state              state;
-  用">
-<meta name="twitter:image" content="http://yoursite.com/images/0.1_1.png">
+具体数据结构的讲解
+
+socket 结构体
+proto_ops 结构体">
+<meta name="twitter:image" content="http://yoursite.com/images/1.1_1.png">
   
     <link rel="alternative" href="/atom.xml" title="Sun" type="application/atom+xml">
   
@@ -154,7 +158,7 @@ socket_state              state;
 </nav>
 
       <div class="body-wrap">
-        <article id="post-socket-structure" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-SocketStructure-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -172,140 +176,32 @@ socket_state              state;
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="套接字层的基本数据结构"><a href="#套接字层的基本数据结构" class="headerlink" title="套接字层的基本数据结构"></a>套接字层的基本数据结构</h3><ol>
+        <pre><code>套接字层的基本数据结构
+</code></pre><ol>
 <li>套接字层位于应用程序与协议栈之间</li>
 <li>对应用程序屏蔽了与协议相关实现的具体细节</li>
 <li>将应用程序发送的与协议无关的请求映射到与协议相关的实现</li>
 <li>不同协议都对应一个 proto_ops 结构，这个结构实现了套接字层函数到传输层函数的映射</li>
 <li>套接字层将一般的请求转换为指定的协议操作</li>
 </ol>
-<p><img src="/images/0.1_1.png" alt=""></p>
-<h3 id="1-struct-socket"><a href="#1-struct-socket" class="headerlink" title="1. struct socket"></a>1. struct socket</h3><ul>
-<li><p><code>socket_state              state;</code></p>
-<p>  用于表示套接字所处的状态，该标志有些状态只对 TCP 套接字有作用<br>  因为只有 TCP 是面向连接的协议，有状态转换的过程</p>
-<ul>
-<li>state 的取值<ul>
-<li><strong>SS_FREE:</strong> 该套接字尚未分配，未使用</li>
-<li><strong>SS_UNCONNECTED:</strong> 盖套接字未连接任何一个对端的套接字</li>
-<li><strong>SS_CONNECTING:</strong> 正在连接过程中</li>
-<li><strong>SS_CONECTED:</strong> 已经连接一个套接字</li>
-<li><strong>SS_DISCONNECTING:</strong> 正在断开连接的过程中</li>
+<p><img src="/images/1.1_1.png" alt=""></p>
+<pre><code>具体数据结构的讲解
+</code></pre><ul>
+<li><a href="http://sunxiaoqiang.top/2016/11/30/SocketStructure-2/" target="_blank" rel="external">socket 结构体</a></li>
+<li><a href="http://sunxiaoqiang.top/2016/11/30/SocketStructure-3/" target="_blank" rel="external">proto_ops 结构体</a></li>
 </ul>
-</li>
-</ul>
-</li>
-<li><p><code>unsigned long              flags;</code></p>
-<ul>
-<li>falgs 的取值<ul>
-<li><strong>SOCK_ASYNC_NOSPACE</strong>    ：标识该套接字的发送队列是否已满</li>
-<li><strong>SOCK_ASYNC_WAITDATA</strong>    ：标识应用程序通过 recv 调用时，是否在等待数据的接收</li>
-<li><strong>SOCK_NOSPACE</strong>            ：标识非异步的情况下盖套接字的发送队列是否已满</li>
-<li><strong>SOCK_PASSCRED</strong>            :标识是否设置了 SO_PASSCRE 套接字选项</li>
-<li><strong>SOCK_PASSSEC</strong>            ：标识是否设置了 SO_PASSSEC 选项</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p><code>const struct proto_ops    *ops;</code><br>  指向套接字系统调用中选择对应类型的套接字接口<br>  用于将套接字系统调用映射相应的传输层的实现</p>
-<ul>
-<li><p>三种 proto_ops 结构实例</p>
-<ul>
-<li><strong>TCP:</strong> inet_ stream_ops </li>
-<li><strong>UDP:</strong> inet_ dgram_ops </li>
-<li><strong>RAW:</strong> inet_ sockraw_ops </li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><code>struct fasync_struct      *fasync_list;</code></p>
-</li>
-</ul>
-<p>存储了异步的通知队列</p>
-<ul>
-<li><code>struct file                  *file;</code></li>
-</ul>
-<p>指向与该套接字相关的 file 结构的指针</p>
-<ul>
-<li><code>struct sock                  *sk;</code></li>
-</ul>
-<p>指向了与该套接字关联的传输控制块</p>
-<ul>
-<li><code>wait_queue_head_t         wait;</code></li>
-</ul>
-<p>等待该套接字的进程队列</p>
-<ul>
-<li><p><code>short                      type;</code></p>
-<ul>
-<li><strong>SOCK_STREAM:</strong> 基于连接的套接字</li>
-<li><strong>SOCK_DGRAM:</strong> 基于数据报的套接字|</li>
-<li><strong>SOCK_RAW:</strong> 原始套接字</li>
-<li><strong>SOCK_RDM:</strong> 可靠传输报文套接字</li>
-<li><strong>SOCK_SEQPACKET:</strong> 顺序分组套接字</li>
-<li><strong>SOCK_DECCP:</strong> 数据报拥塞控制协议套接字</li>
-<li><strong>SOCK_PACKET:</strong> 混杂模式套接字</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-struct-inet-protosw"><a href="#2-struct-inet-protosw" class="headerlink" title="2. struct inet_protosw"></a>2. struct inet_protosw</h3><ul>
-<li><p><code>struct list_head         list;</code></p>
-<p>  标识当前结构体要添加到静态数组 inetsw[] 的地址</p>
-</li>
-<li><p><code>unsigned short           type;</code></p>
-<p>  标识了套接字类型</p>
-</li>
-<li><p><code>int                      protocol;</code></p>
-<p>  标识了传输层协议的类型</p>
-</li>
-<li><p><code>struct proto             *prot;</code></p>
-<p>  由传输层到网络层映射的结构体指针</p>
-</li>
-<li><p><code>const struct proto_ops   *ops;</code>  </p>
-<p>  有套接字层到传输层映射的结构体指针</p>
-</li>
-<li><p><code>int                      capability;</code></p>
-<p>  操作这类别套接字所需要的权限</p>
-</li>
-<li><p><code>char                     no_check;</code></p>
-<p>  套接字对应的传输模块是否需要校验</p>
-</li>
-<li><p><code>unsigned char            flags;</code> </p>
-<ul>
-<li><p>flags的可能取值</p>
-<p><strong>INET_PROTOSW_REUSE:</strong> 表示端口是否可重用</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-1-inetsw-array"><a href="#2-1-inetsw-array" class="headerlink" title="2.1 inetsw_array[]"></a>2.1 inetsw_array[]</h3><pre><code>该数组中定义了协议族对应的所有的 inet_protosw 结构体
-</code></pre><p><img src="/images/2.1_1.png" alt=""></p>
-<h3 id="2-2-inetsw"><a href="#2-2-inetsw" class="headerlink" title="2.2 inetsw[]"></a>2.2 inetsw[]</h3><pre><code>1. 一个全局的 list_head 结构体数组,list_head结构体中有指向前驱和后继的两个指针
-2. 其对应的偏移是传输层协议类型对应的整型值
-</code></pre><p><img src="/images/2.2_1.png" alt="">    </p>
-<ol>
-<li>网络子系统初始化时，根据每一个inet_protosw结构的type类型，注册到 inetsw[] 中以其对应的元素为链表组成的一个双向链表中</li>
-<li>当需要创建套接字是，在inetsw[]中搜索匹配的inet_protosw结构体<ul>
-<li>将其中的 ops 成员存储在 socket 结构体的 ops 中，<strong>ops</strong> 为 <strong>struct proto_ops</strong>，<strong>由套接字层到传输层映射的结构体指针</strong></li>
-<li>将其中的 proto 成员存储在 sock 结构体的 sk_prot 中， <strong>sk_prot</strong> 为 <strong>struct proto</strong>，<strong>由传输层到网络层映射的结构体指针</strong></li>
-</ul>
-</li>
-</ol>
-<h3 id="3-struct-proto-ops"><a href="#3-struct-proto-ops" class="headerlink" title="3. struct proto_ops"></a>3. struct proto_ops</h3><pre><code>1. 该结构体中 **family** 表示协议族，module 结构体表示成员 **owner** 表示所属模块
-2. 剩下的一组与套接字系统工地阿勇相对应的传输层函数指针，可以看成一个套接字系统调用到传输层函数的跳转表
-3. 这些结构体成员被初始化后，放在了 socket 结构体中的 ops 中
-</code></pre>
+
       
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2016/11/28/socket-structure/" class="archive-article-date">
-  	<time datetime="2016-11-28T12:56:22.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-11-28</time>
+      <a href="/2016/11/30/SocketStructure-1/" class="archive-article-date">
+  	<time datetime="2016-11-30T11:35:03.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-11-30</time>
 </a>
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/socket/">socket</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/套接字/">套接字</a></li></ul>
 	</div>
 
       
@@ -318,11 +214,15 @@ socket_state              state;
   
 <nav id="article-nav">
   
-  
-    <a href="/2016/11/28/test/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">test</div>
-      <i class="icon-circle-right"></i>
+    <a href="/2016/11/30/SocketStructure-2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          socket 结构体
+        
+      </div>
     </a>
+  
   
 </nav>
 
@@ -354,7 +254,7 @@ socket_state              state;
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="socket-structure" data-title="套接字层的基本数据结构" data-url="http://yoursite.com/2016/11/28/socket-structure/"></div>
+	<div class="ds-thread" data-thread-key="SocketStructure-1" data-title="套接字层的基本数据结构" data-url="http://yoursite.com/2016/11/30/SocketStructure-1/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
@@ -431,7 +331,7 @@ socket_state              state;
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/socket/" style="font-size: 10px;">socket</a> <a href="/tags/test/" style="font-size: 10px;">test</a>
+    				<a href="/tags/struct-socket/" style="font-size: 10px;">struct socket</a> <a href="/tags/套接字/" style="font-size: 10px;">套接字</a>
     			</div>
     	</section>
     
