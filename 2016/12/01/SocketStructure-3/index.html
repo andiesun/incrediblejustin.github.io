@@ -6,14 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Sun</title>
+  <title>proto_ops 结构体及其初始化相关数据结构 | Sun</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Sun">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="本篇文章分析 proto_ops 结构体的具体内容及其初始化
+1 proto_ops 结构体的说明12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970/* * net.h，孙小强，2016年">
+<meta property="og:type" content="article">
+<meta property="og:title" content="proto_ops 结构体及其初始化相关数据结构">
+<meta property="og:url" content="http://yoursite.com/2016/12/01/SocketStructure-3/index.html">
 <meta property="og:site_name" content="Sun">
+<meta property="og:description" content="本篇文章分析 proto_ops 结构体的具体内容及其初始化
+1 proto_ops 结构体的说明12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970/* * net.h，孙小强，2016年">
+<meta property="og:image" content="http://yoursite.com/./images/3.2_1.png">
+<meta property="og:updated_time" content="2016-12-01T15:07:02.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Sun">
+<meta name="twitter:title" content="proto_ops 结构体及其初始化相关数据结构">
+<meta name="twitter:description" content="本篇文章分析 proto_ops 结构体的具体内容及其初始化
+1 proto_ops 结构体的说明12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970/* * net.h，孙小强，2016年">
+<meta name="twitter:image" content="http://yoursite.com/./images/3.2_1.png">
   
     <link rel="alternative" href="/atom.xml" title="Sun" type="application/atom+xml">
   
@@ -116,9 +125,7 @@
 </nav>
 
       <div class="body-wrap">
-        
-  
-    <article id="post-SocketStructure-3" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-SocketStructure-3" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -127,8 +134,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/01/SocketStructure-3/">proto_ops 结构体及其初始化相关数据结构</a>
+    <h1 class="article-title" itemprop="name">
+      proto_ops 结构体及其初始化相关数据结构
     </h1>
   
 
@@ -169,133 +176,64 @@
   </div>
 </article>
 
-
-
-
-
-
-
-
-
-
   
-    <article id="post-SocketStructure-2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/30/SocketStructure-2/">socket 结构体</a>
-    </h1>
   
+    <a href="/2016/11/30/SocketStructure-2/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">socket 结构体</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code>本篇文章分析 socket 结构体的具体内容
-</code></pre><h2 id="1-socket-结构体的调用关系图"><a href="#1-socket-结构体的调用关系图" class="headerlink" title="1 socket 结构体的调用关系图"></a>1 socket 结构体的调用关系图</h2><p><img src="./images/2.1_1.png" alt=""></p>
-<h2 id="2-socket-结构体的说明"><a href="#2-socket-结构体的说明" class="headerlink" title="2 socket 结构体的说明"></a>2 socket 结构体的说明</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">套接字代表了一条通信链路的一端，存储了该端所有与通信有关的信息</div><div class="line"></div><div class="line">这些信息包括：</div><div class="line"><span class="number">1.</span> 使用的协议</div><div class="line"><span class="number">2.</span> 套接字状态</div><div class="line"><span class="number">3.</span> 源和目的地址</div><div class="line"><span class="number">4.</span> 到达的连接队列</div><div class="line"><span class="number">5.</span> 数据缓存</div><div class="line"><span class="number">6.</span> 可选标志</div></pre></td></tr></table></figure>
-<h2 id="3-socket-结构体的定义"><a href="#3-socket-结构体的定义" class="headerlink" title="3 socket 结构体的定义"></a>3 socket 结构体的定义</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line"> * net.h，孙小强，2016年11月30日17:08:11</div><div class="line"> * struct socket 结构体的定义</div><div class="line"> * line 00076</div><div class="line"> */</div><div class="line"> </div><div class="line"><span class="keyword">struct</span> socket &#123;</div><div class="line">	socket_state          	state;</div><div class="line">	</div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></div><div class="line"><span class="comment">/* net.h */</span></div><div class="line"><span class="number">00048</span> <span class="keyword">typedef</span> <span class="keyword">enum</span> &#123;</div><div class="line"><span class="number">00049</span>         SS_FREE = <span class="number">0</span>,         <span class="comment">/* 该套接字尚未分配，未使用                */</span></div><div class="line"><span class="number">00050</span>         SS_UNCONNECTED,      <span class="comment">/* 该套接字未连接任何一个对端的套接字    */</span></div><div class="line"><span class="number">00051</span>         SS_CONNECTING,       <span class="comment">/* 正在连接过程中     */</span></div><div class="line"><span class="number">00052</span>         SS_CONNECTED,        <span class="comment">/* 已经连接一个套接字          */</span></div><div class="line"><span class="number">00053</span>         SS_DISCONNECTING     <span class="comment">/* 正在断开连接的过程中  */</span></div><div class="line"><span class="number">00054</span> &#125; socket_state;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span> </span></div><div class="line"></div><div class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span>		  	flags;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></div><div class="line"><span class="comment">/*net.h*/</span></div><div class="line"><span class="number">00060</span> <span class="meta">#<span class="meta-keyword">define</span> SOCK_ASYNC_NOSPACE      0 <span class="comment">/*标识该套接字的发送队列是否已满*/</span></span></div><div class="line"><span class="number">00061</span> <span class="meta">#<span class="meta-keyword">define</span> SOCK_ASYNC_WAITDATA     1 <span class="comment">/*标识应用程序通过 recv 调用时，是否在等待数据的接收*/</span></span></div><div class="line"><span class="number">00062</span> <span class="meta">#<span class="meta-keyword">define</span> SOCK_NOSPACE            2 <span class="comment">/*标识非异步的情况下盖套接字的发送队列是否已满*/</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line">	<span class="keyword">const</span> <span class="keyword">struct</span> proto_ops	*ops;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></div><div class="line"><span class="comment">/*net.h*/</span></div><div class="line"><span class="number">00095</span> <span class="keyword">struct</span> proto_ops &#123;</div><div class="line"><span class="number">00096</span>         <span class="keyword">int</span>             family;	<span class="comment">/*协议族*/</span></div><div class="line"><span class="number">00097</span>         <span class="keyword">struct</span> <span class="keyword">module</span>   *owner;	<span class="comment">/*所属模块*/</span></div><div class="line"><span class="number">00098</span>         <span class="keyword">int</span>             (*release)   (<span class="keyword">struct</span> socket *sock);	<span class="comment">/*一组与套接字系统调用相应的传输层函数指针*/</span></div><div class="line">......	<span class="comment">/*同上，省略*/</span></div><div class="line"><span class="number">00131</span> &#125;;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line">	<span class="keyword">struct</span> fasync_struct  	*fasync_list;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></div><div class="line"><span class="comment">/*存储了异步通知队列*/</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line">	<span class="keyword">struct</span> file		      	*file;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></div><div class="line"><span class="comment">/*指向与该套接字相关的 file 结构的指针*/</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line">	<span class="keyword">struct</span> sock		      	*sk;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></div><div class="line"><span class="comment">/*指向了与该套接字关联的传输控制块*/</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span>	</span></div><div class="line"></div><div class="line">	<span class="keyword">wait_queue_head_t</span>     	wait;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></div><div class="line"><span class="comment">/*等待该套接字的进程队列*/</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span>	</span></div><div class="line"></div><div class="line">	<span class="keyword">short</span>			      	type;</div><div class="line">	</div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></div><div class="line"><span class="comment">/*net.h*/</span></div><div class="line"><span class="keyword">enum</span> sock_type &#123;</div><div class="line">	SOCK_STREAM	= <span class="number">1</span>,		<span class="comment">/*基于连接的套接字*/</span></div><div class="line">	SOCK_DGRAM	= <span class="number">2</span>,		<span class="comment">/*基于数据报的套接字*/</span></div><div class="line">	SOCK_RAW	= <span class="number">3</span>,		<span class="comment">/*原始套接字*/</span></div><div class="line">	SOCK_RDM	= <span class="number">4</span>,		<span class="comment">/*可靠传输报文套接字*/</span></div><div class="line">	SOCK_SEQPACKET	= <span class="number">5</span>,	<span class="comment">/*顺序分组套接字*/</span></div><div class="line">	SOCK_DCCP	= <span class="number">6</span>,		<span class="comment">/*数据报拥塞控制协议套接字*/</span></div><div class="line">	SOCK_PACKET	= <span class="number">10</span>,		<span class="comment">/*混杂模式套接字*/</span></div><div class="line">&#125;;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/11/30/SocketStructure-2/" class="archive-article-date">
-  	<time datetime="2016-11-30T11:36:20.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-11-30</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/struct-socket/">struct socket</a></li></ul>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
 
 
 
 
 
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="SocketStructure-3" data-title="proto_ops 结构体及其初始化相关数据结构" data-url="http://yoursite.com/2016/12/01/SocketStructure-3/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
 
 
-
-  
-    <article id="post-SocketStructure-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/30/SocketStructure-1/">套接字层的基本数据结构</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code>套接字层的基本数据结构
-</code></pre><ol>
-<li>套接字层位于应用程序与协议栈之间</li>
-<li>对应用程序屏蔽了与协议相关实现的具体细节</li>
-<li>将应用程序发送的与协议无关的请求映射到与协议相关的实现</li>
-<li>不同协议都对应一个 proto_ops 结构，这个结构实现了套接字层函数到传输层函数的映射</li>
-<li>套接字层将一般的请求转换为指定的协议操作</li>
-</ol>
-<p><img src="/images/1.1_1.png" alt=""></p>
-<pre><code>具体数据结构的讲解
-</code></pre><ul>
-<li><a href="http://sunxiaoqiang.top/2016/11/30/SocketStructure-2/" target="_blank" rel="external">socket 结构体</a></li>
-<li><a href="http://sunxiaoqiang.top/2016/11/30/SocketStructure-3/" target="_blank" rel="external">proto_ops 结构体</a></li>
-</ul>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/11/30/SocketStructure-1/" class="archive-article-date">
-  	<time datetime="2016-11-30T11:35:03.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-11-30</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/套接字/">套接字</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-  
 
 
       </div>
@@ -317,8 +255,8 @@
 		fancybox: true,
 		mathjax: false,
 		animate: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
