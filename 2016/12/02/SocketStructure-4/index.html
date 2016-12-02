@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://yoursite.com">
+  <title>SocketStructure_fsys | Sun</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本篇文章分析套接字的文件系统
+1 套接字的文件系统类型 - sock_fs_type12345678910111213141516171819202122/* * socket.c，孙小强，2016年12月02日23:27:29 * sock_fs_type 结构体的定义 * line 332 * 功能： *      1. 每一种文件都有各自的文件类型，套接字关联的文件类型为套接字文件 *">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SocketStructure_fsys">
+<meta property="og:url" content="http://yoursite.com/2016/12/02/SocketStructure-4/index.html">
+<meta property="og:site_name" content="Sun">
+<meta property="og:description" content="本篇文章分析套接字的文件系统
+1 套接字的文件系统类型 - sock_fs_type12345678910111213141516171819202122/* * socket.c，孙小强，2016年12月02日23:27:29 * sock_fs_type 结构体的定义 * line 332 * 功能： *      1. 每一种文件都有各自的文件类型，套接字关联的文件类型为套接字文件 *">
+<meta property="og:updated_time" content="2016-12-02T15:49:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SocketStructure_fsys">
+<meta name="twitter:description" content="本篇文章分析套接字的文件系统
+1 套接字的文件系统类型 - sock_fs_type12345678910111213141516171819202122/* * socket.c，孙小强，2016年12月02日23:27:29 * sock_fs_type 结构体的定义 * line 332 * 功能： *      1. 每一种文件都有各自的文件类型，套接字关联的文件类型为套接字文件 *">
+  
+    <link rel="alternative" href="/atom.xml" title="Sun" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/main.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/images/JT.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">孙小强</a></h1>
+		</hgroup>
+
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a class="js-smart-menu" data-idx="0" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="1" href="javascript:void(0)">标签</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="2" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/incrediblejustin/LinuxKernelNetworkProtocolStack" title="github">github</a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-list"></i></div>
+  		<h1 class="header-author js-mobile-header hide">孙小强</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img src="/images/JT.jpg" class="js-avatar">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">孙小强</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/incrediblejustin/LinuxKernelNetworkProtocolStack" title="github">github</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap">
+        <article id="post-SocketStructure-4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      SocketStructure_fsys
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code>本篇文章分析套接字的文件系统
+</code></pre><h2 id="1-套接字的文件系统类型-sock-fs-type"><a href="#1-套接字的文件系统类型-sock-fs-type" class="headerlink" title="1 套接字的文件系统类型 - sock_fs_type"></a>1 套接字的文件系统类型 - sock_fs_type</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line"> * socket.c，孙小强，2016年12月02日23:27:29</div><div class="line"> * sock_fs_type 结构体的定义</div><div class="line"> * line 332</div><div class="line"> * 功能：</div><div class="line"> *      1. 每一种文件都有各自的文件类型，套接字关联的文件类型为套接字文件</div><div class="line"> *      2. 该结构使套接字和文件描述符关联，并支持特殊套接字层的 i 节点的分配和释放</div><div class="line"> */</div><div class="line"></div><div class="line"><span class="keyword">static</span> <span class="keyword">struct</span> file_system_type sock_fs_type = &#123;</div><div class="line">    .name =         <span class="string">"sockfs"</span>,</div><div class="line"></div><div class="line"><span class="comment">/*文件系统类型*/</span></div><div class="line"></div><div class="line">    .mount =        sockfs_mount,</div><div class="line"></div><div class="line"><span class="comment">/*提供分配超级块的接口实现*/</span></div><div class="line"></div><div class="line">    .kill_sb =      kill_anon_super,</div><div class="line"></div><div class="line"><span class="comment">/*提供释放超级块的接口实现*/</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="2-套接字文件系统的超级块操作接口-sockfs-ops"><a href="#2-套接字文件系统的超级块操作接口-sockfs-ops" class="headerlink" title="2 套接字文件系统的超级块操作接口 - sockfs_ops"></a>2 套接字文件系统的超级块操作接口 - sockfs_ops</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line"> * socket.c，孙小强，2016年12月02日23:36:13</div><div class="line"> * sockfs_ops 结构体的定义</div><div class="line"> * line 304</div><div class="line"> * 功能：</div><div class="line"> *      1.定义了套接字文件系统的操作接口</div><div class="line"> *      2.支持具体的接口有 i 节点的分配、释放、获取文件系统的状态信息</div><div class="line"> */</div><div class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">struct</span> super_operations sockfs_ops = &#123;</div><div class="line">    .alloc_inode    = sock_alloc_inode,</div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line"> *   sock_alloc_inode() </div><div class="line"> *   套接字文件系统的 i 节点的分配函数</div><div class="line"> */</div><div class="line"></div><div class="line">    .destroy_inode  = sock_destroy_inode,</div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line"> *   sock_destroy_inode()</div><div class="line"> *  套接字文件系统的 i 节点释放函数</div><div class="line"> */    </div><div class="line">    .statfs         = simple_statfs,</div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line"> *   simple_statfs()</div><div class="line"> *   获取套接字文件系统的状态信息函数</div><div class="line"> */</div><div class="line"></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2016/12/02/SocketStructure-4/" class="archive-article-date">
+  	<time datetime="2016-12-02T15:23:24.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-12-02</time>
+</a>
+      
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2016/12/01/SocketStructure-3/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">proto_ops 结构体及其初始化相关数据结构</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="SocketStructure-4" data-title="SocketStructure_fsys" data-url="http://yoursite.com/2016/12/02/SocketStructure-4/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 孙小强
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js"></script>
+
+
+    
+<div class="tools-col">
+  <ul class="btn-wrap">
+    
+      <li class="chose" data-hook="tools-section-all"><span class="text">全部</span><i class="icon-book"></i></li>
+    
+    
+      <li data-hook="tools-section-tag"><span class="text">标签</span><i class="icon-price-tags"></i></li>
+    
+    
+    
+      <li data-hook="tools-section-me"><span class="text">我</span><i class="icon-smile"></i></li>
+    
+  </ul>
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all chose">
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-tag">
+    			<div class="widget tagcloud" id="js-tagcloud">
+    				<a href="/tags/struct-socket/" style="font-size: 10px;">struct socket</a> <a href="/tags/套接字/" style="font-size: 10px;">套接字</a>
+    			</div>
+    	</section>
+    
+
+    
+
+    
+    	<section class="tools-section tools-section-me">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">新博客&lt;br&gt;&lt;br&gt;测试一下&lt;br&gt;谢谢大家</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+</body>
+</html>
